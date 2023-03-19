@@ -1,4 +1,4 @@
-import { UserCreateDto, UserUpdateDto } from './dto/user.dto';
+import { UserCreateDto, UserUpdateDto } from './users.dto';
 import { User } from './users.entity';
 import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
@@ -11,61 +11,42 @@ export class UsersService {
   ) {}
 
   async create(data: UserCreateDto) {
-    try {
-      return this.usersRepository.save(data);
-    } catch (e) {
-      throw new HttpException(
-        `Ocorreu um erro! Erro: ${e}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.usersRepository.save(data).catch((e) => {
+      if (e.code === '23505') {
+        throw new HttpException(e.message, HttpStatus.CONFLICT);
+      } else {
+        throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+      }
+    });
   }
 
   async findById(id: number) {
-    try {
-      return this.usersRepository.findOne({
+    return this.usersRepository
+      .findOne({
         where: {
           id,
         },
+      })
+      .catch((e) => {
+        throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       });
-    } catch (e) {
-      throw new HttpException(
-        `Ocorreu um erro! Erro: ${e}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
   }
 
   async findAll() {
-    try {
-      return this.usersRepository.find();
-    } catch (e) {
-      throw new HttpException(
-        `Ocorreu um erro! Erro: ${e}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.usersRepository.find().catch((e) => {
+      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    });
   }
 
   async update(id: number, data: UserUpdateDto) {
-    try {
-      return this.usersRepository.update(id, data);
-    } catch (e) {
-      throw new HttpException(
-        `Ocorreu um erro! Erro: ${e}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.usersRepository.update(id, data).catch((e) => {
+      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    });
   }
 
   async delete(id: number) {
-    try {
-      return this.usersRepository.delete(id);
-    } catch (e) {
-      throw new HttpException(
-        `Ocorreu um erro! Erro: ${e}`,
-        HttpStatus.INTERNAL_SERVER_ERROR,
-      );
-    }
+    return this.usersRepository.delete(id).catch((e) => {
+      throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
+    });
   }
 }
