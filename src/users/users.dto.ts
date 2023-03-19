@@ -5,15 +5,18 @@ import {
   IsEmail,
   IsBoolean,
   ValidateIf,
+  MaxLength,
 } from 'class-validator';
 
 export class UserCreateDto {
   @IsNotEmpty()
   @IsString()
+  @MaxLength(150)
   name: string;
 
   @IsNotEmpty()
   @IsEmail()
+  @MaxLength(200)
   email: string;
 
   @IsOptional()
@@ -34,5 +37,6 @@ export class UserCreateDto {
 export class UserUpdateDto {
   @IsOptional()
   @IsString()
+  @MaxLength(150)
   name?: string;
 }

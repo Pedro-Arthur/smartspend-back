@@ -11,13 +11,16 @@ export class UsersService {
   ) {}
 
   async create(data: UserCreateDto) {
-    return this.usersRepository.save(data).catch((e) => {
+    const user = await this.usersRepository.save(data).catch((e) => {
       if (e.code === '23505') {
         throw new HttpException(e.message, HttpStatus.CONFLICT);
       } else {
         throw new HttpException(e.message, HttpStatus.INTERNAL_SERVER_ERROR);
       }
     });
+
+    delete user.password;
+    return user;
   }
 
   async findById(id: number) {
