@@ -1,6 +1,6 @@
 import { UserCreateDto, UserUpdateDto } from './dto/user.dto';
 import { User } from './users.entity';
-import { Injectable, Inject } from '@nestjs/common';
+import { Injectable, Inject, HttpException, HttpStatus } from '@nestjs/common';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -11,26 +11,61 @@ export class UsersService {
   ) {}
 
   async create(data: UserCreateDto) {
-    this.usersRepository.save(data);
+    try {
+      return this.usersRepository.save(data);
+    } catch (e) {
+      throw new HttpException(
+        `Ocorreu um erro! Erro: ${e}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findById(id: number) {
-    return this.usersRepository.findOne({
-      where: {
-        id,
-      },
-    });
+    try {
+      return this.usersRepository.findOne({
+        where: {
+          id,
+        },
+      });
+    } catch (e) {
+      throw new HttpException(
+        `Ocorreu um erro! Erro: ${e}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async findAll() {
-    return this.usersRepository.find();
+    try {
+      return this.usersRepository.find();
+    } catch (e) {
+      throw new HttpException(
+        `Ocorreu um erro! Erro: ${e}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async update(id: number, data: UserUpdateDto) {
-    this.usersRepository.update(id, data);
+    try {
+      return this.usersRepository.update(id, data);
+    } catch (e) {
+      throw new HttpException(
+        `Ocorreu um erro! Erro: ${e}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 
   async delete(id: number) {
-    this.usersRepository.delete(id);
+    try {
+      return this.usersRepository.delete(id);
+    } catch (e) {
+      throw new HttpException(
+        `Ocorreu um erro! Erro: ${e}`,
+        HttpStatus.INTERNAL_SERVER_ERROR,
+      );
+    }
   }
 }

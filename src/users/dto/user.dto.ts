@@ -1,7 +1,13 @@
-export interface UserCreateDto {
+import { IsString, IsNotEmpty } from 'class-validator';
+
+export class UserCreateDto {
+  @IsNotEmpty()
+  @IsString()
   name: string;
 }
 
-export interface UserUpdateDto {
+export class UserUpdateDto {
+  @IsNotEmpty()
+  @IsString()
   name: string;
 }
