@@ -8,6 +8,7 @@ const DB_HOST = process.env.DB_HOST || 'localhost';
 const DB_DATABASE = process.env.DB_DATABASE || 'smartspend';
 const DB_USER = process.env.DB_USER || 'postgres';
 const DB_PASS = process.env.DB_PASS || '';
+const DB_PORT = parseInt(process.env.DB_PORT) || 5432;
 
 export const databaseProviders = [
   {
@@ -16,7 +17,7 @@ export const databaseProviders = [
       await createConnection({
         type: 'postgres',
         host: DB_HOST,
-        port: 5432,
+        port: DB_PORT,
         username: DB_USER,
         password: DB_PASS,
         database: DB_DATABASE,
