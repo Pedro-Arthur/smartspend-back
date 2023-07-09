@@ -45,7 +45,7 @@ export class UserCreateDto {
 export class UserUpdateDto {
   @IsOptional()
   @IsString()
-  @MaxLength(150)
+  @MaxLength(150, { message: 'O nome pode ter no máximo 150 caracteres.' })
   @ApiProperty()
   name?: string;
 }
