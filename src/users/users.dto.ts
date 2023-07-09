@@ -42,3 +42,10 @@ export class UserUpdateDto {
   @ApiProperty()
   name?: string;
 }
+
+export class UserCreateWithGoogleDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  token: string;
+}

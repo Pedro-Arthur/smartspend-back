@@ -1,4 +1,8 @@
-import { UserCreateDto, UserUpdateDto } from './users.dto';
+import {
+  UserCreateDto,
+  UserCreateWithGoogleDto,
+  UserUpdateDto,
+} from './users.dto';
 import { User } from './users.entity';
 import { Injectable, Inject, ConflictException } from '@nestjs/common';
 import { Repository } from 'typeorm';
@@ -32,5 +36,9 @@ export class UsersService {
 
   async update(id: number, data: UserUpdateDto) {
     this.usersRepository.update(id, data);
+  }
+
+  async createWithGoogle(data: UserCreateWithGoogleDto) {
+    console.log(data);
   }
 }

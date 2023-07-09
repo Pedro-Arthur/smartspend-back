@@ -1,6 +1,10 @@
 import { Body, Controller, HttpCode, Param, Patch, Post } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UserCreateDto, UserUpdateDto } from './users.dto';
+import {
+  UserCreateDto,
+  UserUpdateDto,
+  UserCreateWithGoogleDto,
+} from './users.dto';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 
 @Controller('users')
@@ -12,6 +16,12 @@ export class UsersController {
   @ApiBody({ type: UserCreateDto })
   async create(@Body() data: UserCreateDto) {
     return this.usersService.create(data);
+  }
+
+  @Post('withGoogle')
+  @ApiBody({ type: UserCreateWithGoogleDto })
+  async createWithGoogle(@Body() data: UserCreateWithGoogleDto) {
+    return this.usersService.createWithGoogle(data);
   }
 
   @Patch(':id')
