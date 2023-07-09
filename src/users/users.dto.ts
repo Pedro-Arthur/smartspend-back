@@ -25,13 +25,9 @@ export class UserCreateDto {
   password?: string | null;
 
   @IsOptional()
-  @IsString()
-  @ValidateIf((object, value) => value !== null)
-  photoUrl?: string | null;
-
-  @IsNotEmpty()
   @IsBoolean()
-  withGoogle: boolean;
+  @ValidateIf((object, value) => value !== null)
+  withGoogle?: boolean | null;
 }
 
 export class UserUpdateDto {

@@ -20,11 +20,14 @@ export class User {
   @Column({ type: 'varchar', length: 255, nullable: true })
   password?: string | null;
 
-  @Column({ type: 'varchar', length: 255, nullable: true })
-  photoUrl?: string | null;
-
-  @Column({ type: 'boolean', nullable: false })
+  @Column({ type: 'boolean', nullable: true, default: false })
   withGoogle: boolean;
+
+  @Column({ type: 'boolean', nullable: true, default: false })
+  hasAcceptedTerms: boolean;
+
+  @Column({ type: 'boolean', nullable: true, default: false })
+  hasConfirmedEmail: boolean;
 
   @CreateDateColumn()
   createdAt: Date;
