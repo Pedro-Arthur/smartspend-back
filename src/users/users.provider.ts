@@ -1,10 +1,10 @@
-import { Connection } from 'typeorm';
+import { DataSource } from 'typeorm';
 import { User } from './users.entity';
 
 export const usersProviders = [
   {
     provide: 'USER_REPOSITORY',
-    useFactory: (connection: Connection) => connection.getRepository(User),
-    inject: ['DATABASE_CONNECTION'],
+    useFactory: (dataSource: DataSource) => dataSource.getRepository(User),
+    inject: ['DATA_SOURCE'],
   },
 ];
