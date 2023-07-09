@@ -2,6 +2,7 @@ import { UserCreateDto, UserUpdateDto } from './users.dto';
 import { User } from './users.entity';
 import { Injectable, Inject, ConflictException } from '@nestjs/common';
 import { Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,10 @@ export class UsersService {
       throw new ConflictException('E-mail já utilizado por outro usuário!');
     }
 
-    const user = await this.usersRepository.save(data);
+    const user = await this.usersRepository.save({
+      ...data,
+      password: await bcrypt.hash(data.password, 10),
+    });
     delete user.password;
     return user;
   }
