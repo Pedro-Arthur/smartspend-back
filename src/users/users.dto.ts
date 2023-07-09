@@ -5,7 +5,6 @@ import {
   IsNotEmpty,
   IsOptional,
   IsEmail,
-  IsBoolean,
   ValidateIf,
   MaxLength,
   Matches,
@@ -34,12 +33,6 @@ export class UserCreateDto {
       'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial. Além disso, a senha deve ter no mínimo 8 caracteres de comprimento.',
   })
   password?: string | null;
-
-  @IsOptional()
-  @IsBoolean()
-  @ValidateIf((object, value) => value !== null)
-  @ApiProperty()
-  withGoogle?: boolean | null;
 }
 
 export class UserUpdateDto {
