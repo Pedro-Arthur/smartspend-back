@@ -8,6 +8,7 @@ import {
   IsBoolean,
   ValidateIf,
   MaxLength,
+  Matches,
 } from 'class-validator';
 
 export class UserCreateDto {
@@ -18,7 +19,7 @@ export class UserCreateDto {
   name: string;
 
   @IsNotEmpty()
-  @IsEmail()
+  @IsEmail({}, { message: 'E-mail inválido!' })
   @MaxLength(200)
   @ApiProperty()
   @Transform(({ value }) => value.toLowerCase().trim())
@@ -28,6 +29,10 @@ export class UserCreateDto {
   @IsString()
   @ValidateIf((object, value) => value !== null)
   @ApiProperty()
+  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^\w\s]).{8,}$/, {
+    message:
+      'A senha deve conter pelo menos uma letra minúscula, uma letra maiúscula, um número e um caractere especial. Além disso, a senha deve ter no mínimo 8 caracteres de comprimento.',
+  })
   password?: string | null;
 
   @IsOptional()
