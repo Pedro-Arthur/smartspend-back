@@ -14,13 +14,13 @@ import {
 export class UserCreateDto {
   @IsNotEmpty()
   @IsString()
-  @MaxLength(150)
+  @MaxLength(150, { message: 'O nome pode ter no máximo 150 caracteres.' })
   @ApiProperty()
   name: string;
 
   @IsNotEmpty()
   @IsEmail({}, { message: 'E-mail inválido!' })
-  @MaxLength(200)
+  @MaxLength(200, { message: 'O e-mail pode ter no máximo 200 caracteres.' })
   @ApiProperty()
   @Transform(({ value }) => value.toLowerCase().trim())
   email: string;
