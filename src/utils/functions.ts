@@ -15,7 +15,7 @@ export async function getTemplateString(
   });
 }
 
-export function generateRandomCode(length) {
+export function generateRandomCode(length: number): string {
   const characters =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let code = '';

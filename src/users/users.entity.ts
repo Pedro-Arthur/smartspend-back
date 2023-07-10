@@ -1,9 +1,11 @@
+import { Code } from 'src/codes/codes.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'users' })
@@ -28,6 +30,9 @@ export class User {
 
   @Column({ type: 'boolean', nullable: true, default: false })
   hasConfirmedEmail: boolean;
+
+  @OneToMany(() => Code, (code) => code.user)
+  codes: Code[];
 
   @CreateDateColumn()
   createdAt: Date;
