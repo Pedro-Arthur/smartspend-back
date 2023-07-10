@@ -12,12 +12,14 @@ import {
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { SendGridService } from '@anchan828/nest-sendgrid';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private usersRepository: Repository<User>,
+    private readonly sendGrid: SendGridService,
   ) {}
 
   async create(data: UserCreateDto) {
@@ -36,6 +38,14 @@ export class UsersService {
       password: await bcrypt.hash(data.password, 10),
     });
     delete user.password;
+
+    await this.sendGrid.send({
+      to: data.email,
+      from: process.env.SEND_GRID_SENDER,
+      subject: 'Instruções para confirmar a conta.',
+      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+    });
+
     return user;
   }
 
