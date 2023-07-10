@@ -4,7 +4,13 @@ import {
   UserUpdateDto,
 } from './users.dto';
 import { User } from './users.entity';
-import { Injectable, Inject, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  ConflictException,
+  ForbiddenException,
+  NotFoundException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -39,6 +45,40 @@ export class UsersService {
   }
 
   async createWithGoogle(data: UserCreateWithGoogleDto) {
-    console.log(data);
+    const googleUser: any = await (
+      await fetch('https://www.googleapis.com/userinfo/v2/me', {
+        headers: {
+          Authorization: `Bearer ${data.token}`,
+        },
+      })
+    ).json();
+
+    if (!googleUser) {
+      throw new NotFoundException('Usuário não encontrado!');
+    }
+
+    if (!googleUser.verified_email) {
+      throw new ForbiddenException(
+        'Não é possível se cadastrar com um e-mail que não foi verificado.',
+      );
+    }
+
+    const alreadyExistsUserWithEmail = await this.usersRepository.findOne({
+      where: {
+        email: googleUser.email,
+      },
+    });
+
+    if (alreadyExistsUserWithEmail) {
+      throw new ConflictException('E-mail já utilizado por outro usuário!');
+    }
+
+    const user = await this.usersRepository.save({
+      name: googleUser.name,
+      email: googleUser.email,
+      withGoogle: true,
+    });
+
+    return user;
   }
 }
