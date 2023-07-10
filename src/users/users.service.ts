@@ -13,6 +13,7 @@ import {
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { SendGridService } from '@anchan828/nest-sendgrid';
+import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 
 @Injectable()
 export class UsersService {
@@ -39,11 +40,18 @@ export class UsersService {
     });
     delete user.password;
 
+    const code = generateRandomCode(8);
+
+    const html = await getTemplateString('../templates/confirmAccount.ejs', {
+      name: user.name,
+      url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
+    });
+
     await this.sendGrid.send({
       to: data.email,
       from: process.env.SEND_GRID_SENDER,
       subject: 'Instruções para confirmar a conta.',
-      html: '<strong>and easy to do anywhere, even with Node.js</strong>',
+      html,
     });
 
     return user;
