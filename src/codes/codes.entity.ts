@@ -16,7 +16,7 @@ export class Code {
   @Column({ type: 'varchar', length: 50, nullable: false })
   value: string;
 
-  @ManyToOne(() => User, (user) => user.codes)
+  @ManyToOne(() => User, (user) => user.codes, { nullable: false })
   user: User;
 
   @CreateDateColumn()
