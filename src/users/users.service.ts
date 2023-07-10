@@ -9,7 +9,6 @@ import {
   Inject,
   ConflictException,
   ForbiddenException,
-  NotFoundException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -52,10 +51,6 @@ export class UsersService {
         },
       })
     ).json();
-
-    if (!googleUser) {
-      throw new NotFoundException('Usuário não encontrado!');
-    }
 
     if (!googleUser.verified_email) {
       throw new ForbiddenException(
