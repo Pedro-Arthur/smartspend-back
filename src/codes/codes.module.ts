@@ -6,6 +6,6 @@ import { codesProviders } from './codes.provider';
   imports: [DatabaseModule],
   controllers: [],
   providers: [...codesProviders],
-  exports: [],
+  exports: [...codesProviders],
 })
 export class CodesModule {}
