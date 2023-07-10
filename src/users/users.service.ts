@@ -14,12 +14,16 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
+import { Code } from 'src/codes/codes.entity';
+import { CodeTypeEnum } from 'src/codes/codes.enum';
 
 @Injectable()
 export class UsersService {
   constructor(
     @Inject('USER_REPOSITORY')
     private usersRepository: Repository<User>,
+    @Inject('CODE_REPOSITORY')
+    private codesRepository: Repository<Code>,
     private readonly sendGrid: SendGridService,
   ) {}
 
@@ -41,6 +45,12 @@ export class UsersService {
     delete user.password;
 
     const code = generateRandomCode(8);
+
+    await this.codesRepository.save({
+      value: code,
+      userId: user.id,
+      type: CodeTypeEnum.CONFIRM_ACCOUNT,
+    });
 
     const html = await getTemplateString('../templates/confirmAccount.ejs', {
       name: user.name,

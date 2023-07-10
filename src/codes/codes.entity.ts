@@ -7,6 +7,7 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from 'typeorm';
+import { CodeTypeEnum } from './codes.enum';
 
 @Entity({ name: 'codes' })
 export class Code {
@@ -15,6 +16,13 @@ export class Code {
 
   @Column({ type: 'varchar', length: 50, nullable: false })
   value: string;
+
+  @Column({
+    type: 'enum',
+    enum: CodeTypeEnum,
+    nullable: false,
+  })
+  type: CodeTypeEnum;
 
   @ManyToOne(() => User, (user) => user.codes, { nullable: false })
   user: User;
