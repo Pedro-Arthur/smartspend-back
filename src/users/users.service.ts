@@ -48,11 +48,11 @@ export class UsersService {
 
     await this.codesRepository.save({
       value: code,
-      userId: user.id,
+      user: user,
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
 
-    const html = await getTemplateString('../templates/confirmAccount.ejs', {
+    const html = await getTemplateString('src/templates/confirmAccount.ejs', {
       name: user.name,
       url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
     });
@@ -100,6 +100,26 @@ export class UsersService {
       name: googleUser.name,
       email: googleUser.email,
       withGoogle: true,
+    });
+
+    const code = generateRandomCode(8);
+
+    await this.codesRepository.save({
+      value: code,
+      user: user,
+      type: CodeTypeEnum.CONFIRM_ACCOUNT,
+    });
+
+    const html = await getTemplateString('src/templates/confirmAccount.ejs', {
+      name: googleUser.name,
+      url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
+    });
+
+    await this.sendGrid.send({
+      to: googleUser.email,
+      from: process.env.SEND_GRID_SENDER,
+      subject: 'Instruções para confirmar a conta.',
+      html,
     });
 
     return user;
