@@ -23,13 +23,16 @@ export class User {
   password?: string | null;
 
   @Column({ type: 'boolean', nullable: true, default: false })
-  withGoogle: boolean;
+  withGoogle?: boolean | null;
 
   @Column({ type: 'boolean', nullable: true, default: false })
-  hasAcceptedTerms: boolean;
+  hasAcceptedTerms?: boolean | null;
 
   @Column({ type: 'boolean', nullable: true, default: false })
-  hasConfirmedEmail: boolean;
+  hasConfirmedEmail?: boolean | null;
+
+  @Column({ type: 'varchar', nullable: true, length: 255 })
+  pictureUrl?: string | null;
 
   @OneToMany(() => Code, (code) => code.user)
   codes: Code[];

@@ -3,6 +3,7 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule } from '@nestjs/config';
 import { SendGridModule } from '@anchan828/nest-sendgrid';
 import { CodesModule } from './codes/codes.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { CodesModule } from './codes/codes.module';
     }),
     UsersModule,
     CodesModule,
+    AuthModule,
   ],
 })
 export class AppModule {}

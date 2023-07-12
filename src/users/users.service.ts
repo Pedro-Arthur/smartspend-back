@@ -103,6 +103,7 @@ export class UsersService {
       name: googleUser.name,
       email: googleUser.email,
       withGoogle: true,
+      pictureUrl: googleUser.picture || null,
     });
 
     const code = generateRandomCode(8);
