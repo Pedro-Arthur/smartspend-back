@@ -9,6 +9,6 @@ import { CodesModule } from 'src/codes/codes.module';
   imports: [DatabaseModule, CodesModule],
   controllers: [UsersController],
   providers: [...usersProviders, UsersService],
-  exports: [],
+  exports: [...usersProviders],
 })
 export class UsersModule {}
