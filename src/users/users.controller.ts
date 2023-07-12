@@ -1,4 +1,13 @@
-import { Body, Controller, HttpCode, Param, Patch, Post } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  Param,
+  Patch,
+  Post,
+  Res,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
   UserCreateDto,
@@ -30,5 +39,12 @@ export class UsersController {
   @ApiBody({ type: UserUpdateDto })
   async update(@Param('id') id: number, @Body() data: UserUpdateDto) {
     return this.usersService.update(id, data);
+  }
+
+  @Get('confirmAccount/:code')
+  @HttpCode(200)
+  @ApiParam({ name: 'code', type: 'string', required: true })
+  async confirmAccount(@Res() res, @Param('code') code: string) {
+    return this.usersService.confirmAccount(res, code);
   }
 }

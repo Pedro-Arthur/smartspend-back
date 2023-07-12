@@ -52,10 +52,13 @@ export class UsersService {
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
 
-    const html = await getTemplateString('src/templates/confirmAccount.ejs', {
-      name: user.name,
-      url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
-    });
+    const html = await getTemplateString(
+      'src/templates/confirmAccountEmail.ejs',
+      {
+        name: user.name,
+        url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
+      },
+    );
 
     await this.sendGrid.send({
       to: data.email,
@@ -110,10 +113,13 @@ export class UsersService {
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
 
-    const html = await getTemplateString('src/templates/confirmAccount.ejs', {
-      name: googleUser.name,
-      url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
-    });
+    const html = await getTemplateString(
+      'src/templates/confirmAccountEmail.ejs',
+      {
+        name: googleUser.name,
+        url: `${process.env.URL_CONFIRM_ACCOUNT}${code}`,
+      },
+    );
 
     await this.sendGrid.send({
       to: googleUser.email,
@@ -123,5 +129,51 @@ export class UsersService {
     });
 
     return user;
+  }
+
+  async confirmAccount(res, code: string) {
+    const foundCode = await this.codesRepository.findOne({
+      where: {
+        value: code,
+        type: CodeTypeEnum.CONFIRM_ACCOUNT,
+      },
+      select: {
+        id: true,
+        user: {
+          id: true,
+        },
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    let error = true;
+    let message = 'error';
+
+    if (!foundCode) {
+      error = true;
+      message = 'Código inválido!';
+    } else {
+      error = false;
+      message = 'Conta confirmada com sucesso!';
+
+      await this.usersRepository.update(
+        { id: foundCode.user.id },
+        { hasConfirmedEmail: true },
+      );
+
+      await this.codesRepository.delete({ id: foundCode.id });
+    }
+
+    res.writeHead(200, { 'Content-Type': 'text/html' });
+    const html = await getTemplateString(
+      'src/templates/confirmAccountResponse.ejs',
+      {
+        error,
+        message,
+      },
+    );
+    res.end(html);
   }
 }
