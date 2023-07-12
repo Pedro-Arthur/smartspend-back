@@ -7,10 +7,11 @@ import {
 import { Repository } from 'typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { Code } from 'src/codes/codes.entity';
-import { ResetPasswordSendCode } from './auth.dto';
+import { ResetPasswordSendCode, ResetPasswordUpdate } from './auth.dto';
 import { User } from 'src/users/users.entity';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -71,5 +72,34 @@ export class AuthService {
     if (!foundCode) {
       throw new ForbiddenException('Código inválido!');
     }
+  }
+
+  async updatePassword(code: string, data: ResetPasswordUpdate) {
+    const foundCode = await this.codesRepository.findOne({
+      where: {
+        value: code,
+        type: CodeTypeEnum.RECOVER_PASSWORD,
+      },
+      select: {
+        id: true,
+        user: {
+          id: true,
+        },
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    if (!foundCode) {
+      throw new ForbiddenException('Código inválido!');
+    }
+
+    await this.usersRepository.update(
+      { id: foundCode.user.id },
+      { password: await bcrypt.hash(data.newPassword, 10) },
+    );
+
+    await this.codesRepository.delete({ id: foundCode.id });
   }
 }
