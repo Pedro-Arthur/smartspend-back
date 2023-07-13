@@ -12,6 +12,7 @@ import { User } from 'src/users/users.entity';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
 import * as bcrypt from 'bcrypt';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class AuthService {
@@ -43,7 +44,7 @@ export class AuthService {
     const code = generateRandomCode(8);
 
     await this.codesRepository.save({
-      value: await bcrypt.hash(code, 10),
+      value: crypto.createHash('md5').update(code).digest('hex'),
       user: foundUser,
       type: CodeTypeEnum.RECOVER_PASSWORD,
     });
@@ -64,7 +65,7 @@ export class AuthService {
   async checkCode(code: string) {
     const foundCode = await this.codesRepository.findOne({
       where: {
-        value: await bcrypt.hash(code, 10),
+        value: crypto.createHash('md5').update(code).digest('hex'),
         type: CodeTypeEnum.RECOVER_PASSWORD,
       },
     });
@@ -77,7 +78,7 @@ export class AuthService {
   async updatePassword(code: string, data: ResetPasswordUpdate) {
     const foundCode = await this.codesRepository.findOne({
       where: {
-        value: await bcrypt.hash(code, 10),
+        value: crypto.createHash('md5').update(code).digest('hex'),
         type: CodeTypeEnum.RECOVER_PASSWORD,
       },
       select: {

@@ -16,6 +16,7 @@ import { SendGridService } from '@anchan828/nest-sendgrid';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { Code } from 'src/codes/codes.entity';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
+import * as crypto from 'crypto';
 
 @Injectable()
 export class UsersService {
@@ -47,7 +48,7 @@ export class UsersService {
     const code = generateRandomCode(8);
 
     await this.codesRepository.save({
-      value: await bcrypt.hash(code, 10),
+      value: crypto.createHash('md5').update(code).digest('hex'),
       user: user,
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
@@ -109,7 +110,7 @@ export class UsersService {
     const code = generateRandomCode(8);
 
     await this.codesRepository.save({
-      value: await bcrypt.hash(code, 10),
+      value: crypto.createHash('md5').update(code).digest('hex'),
       user: user,
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
@@ -135,7 +136,7 @@ export class UsersService {
   async confirmAccount(res, code: string) {
     const foundCode = await this.codesRepository.findOne({
       where: {
-        value: await bcrypt.hash(code, 10),
+        value: crypto.createHash('md5').update(code).digest('hex'),
         type: CodeTypeEnum.CONFIRM_ACCOUNT,
       },
       select: {
