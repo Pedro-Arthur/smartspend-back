@@ -43,7 +43,7 @@ export class AuthService {
     const code = generateRandomCode(8);
 
     await this.codesRepository.save({
-      value: code,
+      value: await bcrypt.hash(code, 10),
       user: foundUser,
       type: CodeTypeEnum.RECOVER_PASSWORD,
     });
@@ -64,7 +64,7 @@ export class AuthService {
   async checkCode(code: string) {
     const foundCode = await this.codesRepository.findOne({
       where: {
-        value: code,
+        value: await bcrypt.hash(code, 10),
         type: CodeTypeEnum.RECOVER_PASSWORD,
       },
     });
@@ -77,7 +77,7 @@ export class AuthService {
   async updatePassword(code: string, data: ResetPasswordUpdate) {
     const foundCode = await this.codesRepository.findOne({
       where: {
-        value: code,
+        value: await bcrypt.hash(code, 10),
         type: CodeTypeEnum.RECOVER_PASSWORD,
       },
       select: {

@@ -47,7 +47,7 @@ export class UsersService {
     const code = generateRandomCode(8);
 
     await this.codesRepository.save({
-      value: code,
+      value: await bcrypt.hash(code, 10),
       user: user,
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
@@ -109,7 +109,7 @@ export class UsersService {
     const code = generateRandomCode(8);
 
     await this.codesRepository.save({
-      value: code,
+      value: await bcrypt.hash(code, 10),
       user: user,
       type: CodeTypeEnum.CONFIRM_ACCOUNT,
     });
@@ -135,7 +135,7 @@ export class UsersService {
   async confirmAccount(res, code: string) {
     const foundCode = await this.codesRepository.findOne({
       where: {
-        value: code,
+        value: await bcrypt.hash(code, 10),
         type: CodeTypeEnum.CONFIRM_ACCOUNT,
       },
       select: {
