@@ -14,7 +14,7 @@ export class Code {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'varchar', length: 255, nullable: false })
+  @Column({ type: 'varchar', length: 500, nullable: false })
   value: string;
 
   @Column({

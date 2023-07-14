@@ -53,8 +53,32 @@ export class AuthService {
       hasAcceptedTerms: user.hasAcceptedTerms,
     };
 
+    const token = this.jwtService.sign(payload);
+
+    const foundToken = await this.codesRepository.findOne({
+      where: {
+        user: { id: user.id },
+        type: CodeTypeEnum.JWT,
+      },
+    });
+
+    if (foundToken) {
+      await this.codesRepository.update(
+        { id: foundToken.id },
+        {
+          value: token,
+        },
+      );
+    } else {
+      await this.codesRepository.save({
+        value: token,
+        user: user,
+        type: CodeTypeEnum.JWT,
+      });
+    }
+
     return {
-      token: this.jwtService.sign(payload),
+      token,
     };
   }
 
