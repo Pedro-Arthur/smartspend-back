@@ -15,6 +15,7 @@ import {
   LoginDto,
   ResetPasswordSendCodeDto,
   ResetPasswordUpdateDto,
+  TokenDto,
 } from './auth.dto';
 import { LocalAuthGuard } from 'src/guards/local-auth.guard';
 import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
@@ -29,6 +30,12 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@Request() req) {
     return this.authService.generateAuthToken(req.user);
+  }
+
+  @Post('loginByToken')
+  @ApiBody({ type: TokenDto })
+  async loginByToken(@Body() data: TokenDto) {
+    return this.authService.loginByToken(data.token);
   }
 
   @UseGuards(JwtAuthGuard)

@@ -33,7 +33,7 @@ export class LoginDto {
   password: string;
 }
 
-export class LoginWithGoogleDto {
+export class TokenDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()

@@ -82,6 +82,24 @@ export class AuthService {
     };
   }
 
+  async loginByToken(token: string) {
+    const foundToken = await this.codesRepository.findOne({
+      where: {
+        value: token,
+        type: CodeTypeEnum.JWT,
+      },
+      relations: {
+        user: true,
+      },
+    });
+
+    if (!foundToken) {
+      throw new NotFoundException('Token inválido!');
+    }
+
+    return this.generateAuthToken(foundToken.user);
+  }
+
   async sendCodeByEmail(data: ResetPasswordSendCodeDto) {
     const foundUser = await this.usersRepository.findOne({
       where: {
@@ -129,7 +147,7 @@ export class AuthService {
     });
 
     if (!foundCode) {
-      throw new ForbiddenException('Código inválido!');
+      throw new NotFoundException('Código inválido!');
     }
   }
 
@@ -151,7 +169,7 @@ export class AuthService {
     });
 
     if (!foundCode) {
-      throw new ForbiddenException('Código inválido!');
+      throw new NotFoundException('Código inválido!');
     }
 
     await this.usersRepository.update(
