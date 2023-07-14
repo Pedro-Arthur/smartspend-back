@@ -7,7 +7,12 @@ import {
 import { Repository } from 'typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { Code } from 'src/codes/codes.entity';
-import { ResetPasswordSendCodeDto, ResetPasswordUpdateDto } from './auth.dto';
+import {
+  LoginDto,
+  LoginWithGoogleDto,
+  ResetPasswordSendCodeDto,
+  ResetPasswordUpdateDto,
+} from './auth.dto';
 import { User } from 'src/users/users.entity';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
@@ -23,6 +28,10 @@ export class AuthService {
     private codesRepository: Repository<Code>,
     private readonly sendGrid: SendGridService,
   ) {}
+
+  async login(data: LoginDto) {}
+
+  async loginWithGoogle(data: LoginWithGoogleDto) {}
 
   async sendCodeByEmail(data: ResetPasswordSendCodeDto) {
     const foundUser = await this.usersRepository.findOne({

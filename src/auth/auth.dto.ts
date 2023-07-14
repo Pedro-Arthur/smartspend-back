@@ -20,3 +20,22 @@ export class ResetPasswordUpdateDto {
   })
   newPassword: string;
 }
+
+export class LoginDto {
+  @IsNotEmpty()
+  @IsEmail({}, { message: 'E-mail inválido!' })
+  @ApiProperty()
+  email: string;
+
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  password: string;
+}
+
+export class LoginWithGoogleDto {
+  @IsNotEmpty()
+  @IsString()
+  @ApiProperty()
+  token: string;
+}
