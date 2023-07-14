@@ -97,7 +97,7 @@ export class AuthService {
     return this.generateAuthToken(foundToken.user);
   }
 
-  async loginByGoogle(token: string) {
+  async loginWithGoogle(token: string) {
     const googleUser: any = await (
       await fetch('https://www.googleapis.com/userinfo/v2/me', {
         headers: {

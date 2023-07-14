@@ -38,10 +38,10 @@ export class AuthController {
     return this.authService.loginByToken(data.token);
   }
 
-  @Post('loginByGoogle')
+  @Post('loginWithGoogle')
   @ApiBody({ type: TokenDto })
-  async loginByGoogle(@Body() data: TokenDto) {
-    return this.authService.loginByGoogle(data.token);
+  async loginWithGoogle(@Body() data: TokenDto) {
+    return this.authService.loginWithGoogle(data.token);
   }
 
   @UseGuards(JwtAuthGuard)
