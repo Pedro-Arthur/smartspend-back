@@ -8,6 +8,7 @@ import {
   Post,
   Res,
   UseGuards,
+  Request,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -41,8 +42,12 @@ export class UsersController {
   @HttpCode(200)
   @ApiParam({ name: 'id', type: 'string', required: true })
   @ApiBody({ type: UserUpdateDto })
-  async update(@Param('id') id: number, @Body() data: UserUpdateDto) {
-    return this.usersService.update(id, data);
+  async update(
+    @Request() req,
+    @Param('id') id: number,
+    @Body() data: UserUpdateDto,
+  ) {
+    return this.usersService.update(req.user.id, id, data);
   }
 
   @Get('confirmAccount/:code')

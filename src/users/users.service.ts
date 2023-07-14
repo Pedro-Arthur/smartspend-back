@@ -71,7 +71,11 @@ export class UsersService {
     return user;
   }
 
-  async update(id: number, data: UserUpdateDto) {
+  async update(reqUserId: number, id: number, data: UserUpdateDto) {
+    if (reqUserId != id) {
+      throw new ForbiddenException('Não é possível editar outro usuário.');
+    }
+
     this.usersRepository.update(id, data);
   }
 
