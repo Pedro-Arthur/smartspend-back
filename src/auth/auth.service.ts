@@ -7,17 +7,13 @@ import {
 import { Repository } from 'typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { Code } from 'src/codes/codes.entity';
-import {
-  LoginDto,
-  LoginWithGoogleDto,
-  ResetPasswordSendCodeDto,
-  ResetPasswordUpdateDto,
-} from './auth.dto';
+import { ResetPasswordSendCodeDto, ResetPasswordUpdateDto } from './auth.dto';
 import { User } from 'src/users/users.entity';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
 import * as bcrypt from 'bcrypt';
 import * as crypto from 'crypto';
+import { JwtService } from '@nestjs/jwt';
 
 @Injectable()
 export class AuthService {
@@ -27,11 +23,34 @@ export class AuthService {
     @Inject('CODE_REPOSITORY')
     private codesRepository: Repository<Code>,
     private readonly sendGrid: SendGridService,
+    private jwtService: JwtService,
   ) {}
 
-  async login(data: LoginDto) {}
+  async validateUser(email: string, password: string) {
+    const user = await this.usersRepository.findOne({
+      where: { email, withGoogle: false },
+    });
 
-  async loginWithGoogle(data: LoginWithGoogleDto) {}
+    if (user && (await bcrypt.compare(password, user.password))) {
+      return user;
+    }
+    return null;
+  }
+
+  async generateAuthToken(user: User) {
+    const payload = {
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      pictureUrl: user.pictureUrl,
+      withGoogle: user.withGoogle,
+      hasAcceptedTerms: user.hasAcceptedTerms,
+    };
+
+    return {
+      token: this.jwtService.sign(payload),
+    };
+  }
 
   async sendCodeByEmail(data: ResetPasswordSendCodeDto) {
     const foundUser = await this.usersRepository.findOne({
