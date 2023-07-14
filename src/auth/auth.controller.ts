@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { ResetPasswordSendCode, ResetPasswordUpdate } from './auth.dto';
+import { ResetPasswordSendCodeDto, ResetPasswordUpdateDto } from './auth.dto';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -17,8 +17,8 @@ export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('resetPassword/sendCode')
-  @ApiBody({ type: ResetPasswordSendCode })
-  async sendCodeByEmail(@Body() data: ResetPasswordSendCode) {
+  @ApiBody({ type: ResetPasswordSendCodeDto })
+  async sendCodeByEmail(@Body() data: ResetPasswordSendCodeDto) {
     return this.authService.sendCodeByEmail(data);
   }
 
@@ -31,10 +31,10 @@ export class AuthController {
   @Patch('resetPassword/updatePassword/:code')
   @HttpCode(200)
   @ApiParam({ name: 'code', type: 'string', required: true })
-  @ApiBody({ type: ResetPasswordUpdate })
+  @ApiBody({ type: ResetPasswordUpdateDto })
   async updatePassword(
     @Param('code') code: string,
-    @Body() data: ResetPasswordUpdate,
+    @Body() data: ResetPasswordUpdateDto,
   ) {
     return this.authService.updatePassword(code, data);
   }

@@ -2,7 +2,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { Transform } from 'class-transformer';
 import { IsEmail, IsNotEmpty, IsString, Matches } from 'class-validator';
 
-export class ResetPasswordSendCode {
+export class ResetPasswordSendCodeDto {
   @IsNotEmpty()
   @IsEmail({}, { message: 'E-mail inválido!' })
   @ApiProperty()
@@ -10,7 +10,7 @@ export class ResetPasswordSendCode {
   email: string;
 }
 
-export class ResetPasswordUpdate {
+export class ResetPasswordUpdateDto {
   @IsNotEmpty()
   @IsString()
   @ApiProperty()

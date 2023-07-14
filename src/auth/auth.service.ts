@@ -7,7 +7,7 @@ import {
 import { Repository } from 'typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
 import { Code } from 'src/codes/codes.entity';
-import { ResetPasswordSendCode, ResetPasswordUpdate } from './auth.dto';
+import { ResetPasswordSendCodeDto, ResetPasswordUpdateDto } from './auth.dto';
 import { User } from 'src/users/users.entity';
 import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
@@ -24,7 +24,7 @@ export class AuthService {
     private readonly sendGrid: SendGridService,
   ) {}
 
-  async sendCodeByEmail(data: ResetPasswordSendCode) {
+  async sendCodeByEmail(data: ResetPasswordSendCodeDto) {
     const foundUser = await this.usersRepository.findOne({
       where: {
         email: data.email,
@@ -75,7 +75,7 @@ export class AuthService {
     }
   }
 
-  async updatePassword(code: string, data: ResetPasswordUpdate) {
+  async updatePassword(code: string, data: ResetPasswordUpdateDto) {
     const foundCode = await this.codesRepository.findOne({
       where: {
         value: crypto.createHash('md5').update(code).digest('hex'),
