@@ -39,3 +39,12 @@ export class LoginWithGoogleDto {
   @ApiProperty()
   token: string;
 }
+
+export class JwtUserDto {
+  id: number;
+  name: string;
+  email: string;
+  pictureUrl?: string | null;
+  withGoogle: boolean;
+  hasAcceptedTerms: boolean;
+}
