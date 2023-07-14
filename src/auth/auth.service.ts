@@ -3,7 +3,6 @@ import {
   Inject,
   NotFoundException,
   ForbiddenException,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
@@ -34,9 +33,7 @@ export class AuthService {
 
     if (user && (await bcrypt.compare(password, user.password))) {
       if (!user.hasConfirmedEmail) {
-        throw new UnauthorizedException(
-          'Confirme sua conta para se autenticar!',
-        );
+        throw new ForbiddenException('Confirme sua conta para se autenticar!');
       }
       return user;
     }
@@ -98,6 +95,33 @@ export class AuthService {
     }
 
     return this.generateAuthToken(foundToken.user);
+  }
+
+  async loginByGoogle(token: string) {
+    const googleUser: any = await (
+      await fetch('https://www.googleapis.com/userinfo/v2/me', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      })
+    ).json();
+
+    if (!googleUser.email) {
+      throw new NotFoundException('Não foi possível pegar usuário do Google.');
+    }
+
+    const foundUser = await this.usersRepository.findOne({
+      where: {
+        email: googleUser.email,
+        withGoogle: true,
+      },
+    });
+
+    if (!foundUser) {
+      throw new NotFoundException('Usuário não encontrado.');
+    }
+
+    return this.generateAuthToken(foundUser);
   }
 
   async sendCodeByEmail(data: ResetPasswordSendCodeDto) {

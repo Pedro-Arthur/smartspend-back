@@ -38,6 +38,12 @@ export class AuthController {
     return this.authService.loginByToken(data.token);
   }
 
+  @Post('loginByGoogle')
+  @ApiBody({ type: TokenDto })
+  async loginByGoogle(@Body() data: TokenDto) {
+    return this.authService.loginByGoogle(data.token);
+  }
+
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @Get('user')
