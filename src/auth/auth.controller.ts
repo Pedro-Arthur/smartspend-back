@@ -6,31 +6,28 @@ import {
   Param,
   Patch,
   Post,
+  UseGuards,
+  Request,
 } from '@nestjs/common';
 import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {
   LoginDto,
-  LoginWithGoogleDto,
   ResetPasswordSendCodeDto,
   ResetPasswordUpdateDto,
 } from './auth.dto';
+import { LocalAuthGuard } from 'src/guards/local-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
+  @UseGuards(LocalAuthGuard)
   @Post('login')
   @ApiBody({ type: LoginDto })
-  async login(@Body() data: LoginDto) {
-    return this.authService.login(data);
-  }
-
-  @Post('loginWithGoogle')
-  @ApiBody({ type: LoginWithGoogleDto })
-  async loginWithGoogle(@Body() data: LoginWithGoogleDto) {
-    return this.authService.loginWithGoogle(data);
+  async login(@Request() req) {
+    return this.authService.login(req.user);
   }
 
   @Post('resetPassword/sendCode')
