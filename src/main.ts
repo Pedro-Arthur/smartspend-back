@@ -28,6 +28,7 @@ async function bootstrap() {
     .setTitle('SmartSpend API Docs')
     .setDescription('SmartSpend API routes docs.')
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('docs', app, document, {

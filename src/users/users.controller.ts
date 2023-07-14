@@ -7,6 +7,7 @@ import {
   Patch,
   Post,
   Res,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import {
@@ -14,7 +15,8 @@ import {
   UserUpdateDto,
   UserCreateWithGoogleDto,
 } from './users.dto';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('users')
 @ApiTags('users')
@@ -33,6 +35,8 @@ export class UsersController {
     return this.usersService.createWithGoogle(data);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   @HttpCode(200)
   @ApiParam({ name: 'id', type: 'string', required: true })
