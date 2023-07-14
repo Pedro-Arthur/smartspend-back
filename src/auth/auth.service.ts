@@ -3,6 +3,7 @@ import {
   Inject,
   NotFoundException,
   ForbiddenException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { SendGridService } from '@anchan828/nest-sendgrid';
@@ -32,6 +33,11 @@ export class AuthService {
     });
 
     if (user && (await bcrypt.compare(password, user.password))) {
+      if (!user.hasConfirmedEmail) {
+        throw new UnauthorizedException(
+          'Confirme sua conta para se autenticar!',
+        );
+      }
       return user;
     }
     return null;

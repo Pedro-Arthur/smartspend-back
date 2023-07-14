@@ -9,7 +9,7 @@ import {
   UseGuards,
   Request,
 } from '@nestjs/common';
-import { ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import {
   LoginDto,
@@ -17,6 +17,7 @@ import {
   ResetPasswordUpdateDto,
 } from './auth.dto';
 import { LocalAuthGuard } from 'src/guards/local-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 
 @Controller('auth')
 @ApiTags('auth')
@@ -28,6 +29,13 @@ export class AuthController {
   @ApiBody({ type: LoginDto })
   async login(@Request() req) {
     return this.authService.generateAuthToken(req.user);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @Get('user')
+  getUser(@Request() req) {
+    return req.user;
   }
 
   @Post('resetPassword/sendCode')
