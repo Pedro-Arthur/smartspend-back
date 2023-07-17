@@ -8,6 +8,7 @@ import {
   ValidateIf,
   MaxLength,
   Matches,
+  IsBoolean,
 } from 'class-validator';
 
 export class UserCreateDto {
@@ -41,6 +42,11 @@ export class UserUpdateDto {
   @MaxLength(150, { message: 'O nome pode ter no máximo 150 caracteres.' })
   @ApiProperty()
   name?: string;
+
+  @IsOptional()
+  @IsBoolean()
+  @ApiProperty()
+  hasAcceptedTerms?: boolean;
 }
 
 export class UserCreateWithGoogleDto {
