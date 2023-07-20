@@ -17,7 +17,8 @@
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "seed": "ts-node ./node_modules/typeorm-extension/dist/cli/index.js seed -d ./src/database/dataSource.ts"
   },
   "dependencies": {
     "@anchan828/nest-sendgrid": "^0.6.47",
@@ -42,6 +43,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.2.0",
     "typeorm": "^0.3.12",
+    "typeorm-extension": "^2.8.1",
     "typeorm-naming-strategies": "^4.1.0"
   },
   "devDependencies": {
