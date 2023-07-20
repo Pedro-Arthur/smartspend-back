@@ -11,7 +11,7 @@ export class Bank {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'char', length: 3, nullable: false })
+  @Column({ type: 'char', length: 3, nullable: false, unique: true })
   code: string;
 
   @Column({ type: 'varchar', length: 150, nullable: false })
