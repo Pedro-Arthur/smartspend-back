@@ -6,6 +6,9 @@ import { CodesModule } from './codes/codes.module';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
+import { BanksModule } from './banks/banks.module';
+import { CategoriesModule } from './categories/categories.module';
+import { SpendMethodsModule } from './spendMethods/spendMethods.module';
 
 @Module({
   imports: [
@@ -22,6 +25,9 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
     UsersModule,
     CodesModule,
     AuthModule,
+    BanksModule,
+    CategoriesModule,
+    SpendMethodsModule,
   ],
   providers: [
     {
