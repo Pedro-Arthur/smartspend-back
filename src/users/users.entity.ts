@@ -1,3 +1,4 @@
+import { Category } from 'src/categories/categories.entity';
 import { Code } from 'src/codes/codes.entity';
 import {
   Entity,
@@ -36,6 +37,9 @@ export class User {
 
   @OneToMany(() => Code, (code) => code.user)
   codes: Code[];
+
+  @OneToMany(() => Category, (category) => category.user)
+  categories: Category[];
 
   @CreateDateColumn()
   createdAt: Date;
