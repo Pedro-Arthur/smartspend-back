@@ -17,6 +17,7 @@ import { generateRandomCode, getTemplateString } from 'src/utils/functions';
 import { Code } from 'src/codes/codes.entity';
 import { CodeTypeEnum } from 'src/codes/codes.enum';
 import * as crypto from 'crypto';
+import { JwtUserDto } from 'src/auth/auth.dto';
 
 @Injectable()
 export class UsersService {
@@ -71,12 +72,8 @@ export class UsersService {
     return user;
   }
 
-  async update(reqUserId: number, id: number, data: UserUpdateDto) {
-    if (reqUserId != id) {
-      throw new ForbiddenException('Não é possível editar outro usuário.');
-    }
-
-    this.usersRepository.update(id, data);
+  async update(user: JwtUserDto, data: UserUpdateDto) {
+    this.usersRepository.update(user.id, data);
   }
 
   async createWithGoogle(data: UserCreateWithGoogleDto) {

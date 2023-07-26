@@ -38,16 +38,11 @@ export class UsersController {
 
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @Patch(':id')
+  @Patch()
   @HttpCode(200)
-  @ApiParam({ name: 'id', type: 'string', required: true })
   @ApiBody({ type: UserUpdateDto })
-  async update(
-    @Request() req,
-    @Param('id') id: number,
-    @Body() data: UserUpdateDto,
-  ) {
-    return this.usersService.update(req.user.id, id, data);
+  async update(@Request() req, @Body() data: UserUpdateDto) {
+    return this.usersService.update(req.user, data);
   }
 
   @Get('confirmAccount/:code')
