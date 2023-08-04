@@ -1,3 +1,4 @@
+import { BankAccount } from 'src/bankAccounts/bankAccounts.entity';
 import { Category } from 'src/categories/categories.entity';
 import { Code } from 'src/codes/codes.entity';
 import {
@@ -40,6 +41,9 @@ export class User {
 
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];
+
+  @OneToMany(() => BankAccount, (account) => account.user)
+  accounts: BankAccount[];
 
   @CreateDateColumn()
   createdAt: Date;

@@ -9,6 +9,7 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { BanksModule } from './banks/banks.module';
 import { CategoriesModule } from './categories/categories.module';
 import { SpendMethodsModule } from './spendMethods/spendMethods.module';
+import { BankAccountsModule } from './bankAccounts/bankAccounts.module';
 
 @Module({
   imports: [
@@ -28,6 +29,7 @@ import { SpendMethodsModule } from './spendMethods/spendMethods.module';
     BanksModule,
     CategoriesModule,
     SpendMethodsModule,
+    BankAccountsModule,
   ],
   providers: [
     {
