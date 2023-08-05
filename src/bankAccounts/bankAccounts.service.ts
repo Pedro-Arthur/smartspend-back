@@ -18,6 +18,7 @@ export class BankAccountsService {
     return this.bankAccountsRepository.find({
       where: { user: { id: user.id } },
       select: {
+        id: true,
         agency: true,
         digit: true,
         number: true,
