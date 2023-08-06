@@ -24,6 +24,7 @@ export class BankAccountsService {
         number: true,
         bank: {
           name: true,
+          id: true,
         },
       },
       relations: {
