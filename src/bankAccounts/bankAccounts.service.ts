@@ -54,6 +54,22 @@ export class BankAccountsService {
   async update(user: JwtUserDto, data: BankAccountUpdateDto, id: number) {
     const { bankId, ...rest } = data;
 
+    const bankAccount = await this.bankAccountsRepository.findOne({
+      where: {
+        id,
+        user: {
+          id: user.id,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!bankAccount) {
+      throw new NotFoundException('Conta não encontrada!');
+    }
+
     if (bankId) {
       const bank = await this.banksRepository.findOne({
         where: { id: bankId },
@@ -63,15 +79,16 @@ export class BankAccountsService {
         throw new NotFoundException('Banco não encontrado!');
       }
 
-      return this.bankAccountsRepository.update(
-        { id, user },
-        {
-          bank,
-          ...rest,
-        },
-      );
+      return this.bankAccountsRepository.save({
+        bank,
+        ...bankAccount,
+        ...rest,
+      });
     } else {
-      return this.bankAccountsRepository.update({ id, user }, rest);
+      return this.bankAccountsRepository.save({
+        ...bankAccount,
+        ...rest,
+      });
     }
   }
 
