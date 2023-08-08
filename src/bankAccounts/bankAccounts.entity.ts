@@ -1,3 +1,4 @@
+import { BankCard } from 'src/bankCards/bankCards.entity';
 import { Bank } from 'src/banks/banks.entity';
 import { User } from 'src/users/users.entity';
 import {
@@ -5,6 +6,7 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -28,6 +30,9 @@ export class BankAccount {
 
   @ManyToOne(() => User, (user) => user.accounts, { nullable: false })
   user: User;
+
+  @OneToMany(() => BankCard, (bankCard) => bankCard.bankAccount)
+  cards: BankCard[];
 
   @CreateDateColumn()
   createdAt: Date;
