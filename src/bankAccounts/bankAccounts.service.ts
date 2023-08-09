@@ -1,4 +1,10 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  InternalServerErrorException,
+  ForbiddenException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { JwtUserDto } from 'src/auth/auth.dto';
 import { BankAccount } from './bankAccounts.entity';
@@ -93,6 +99,16 @@ export class BankAccountsService {
   }
 
   async remove(user: JwtUserDto, id: number) {
-    return this.bankAccountsRepository.delete({ id, user });
+    try {
+      await this.bankAccountsRepository.delete({ id, user });
+    } catch (error) {
+      if (error.code && error.code === '23503') {
+        throw new ForbiddenException(
+          'Não é possível deletar uma conta que possui cartões vinculados.',
+        );
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 }
