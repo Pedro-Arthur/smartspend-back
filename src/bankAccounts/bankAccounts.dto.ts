@@ -5,6 +5,7 @@ import {
   IsNumberString,
   IsOptional,
   MaxLength,
+  MinLength,
 } from 'class-validator';
 
 export class BankAccountCreateDto {
@@ -19,7 +20,10 @@ export class BankAccountCreateDto {
   @IsNotEmpty()
   @IsNumberString({}, { message: 'O dígito da conta deve ser um número.' })
   @MaxLength(1, {
-    message: 'O dígito da conta pode ter no máximo 1 caractere.',
+    message: 'O dígito da conta deve ter 1 caractere.',
+  })
+  @MinLength(1, {
+    message: 'O dígito da conta deve ter 1 caractere.',
   })
   @ApiProperty()
   digit: string;
@@ -27,7 +31,10 @@ export class BankAccountCreateDto {
   @IsNotEmpty()
   @IsNumberString({}, { message: 'A agência da conta deve ser um número.' })
   @MaxLength(4, {
-    message: 'A agência da conta pode ter no máximo 4 caracteres.',
+    message: 'A agência da conta deve ter 4 caracteres.',
+  })
+  @MinLength(4, {
+    message: 'A agência da conta deve ter 4 caracteres.',
   })
   @ApiProperty()
   agency: string;
@@ -50,7 +57,10 @@ export class BankAccountUpdateDto {
   @IsOptional()
   @IsNumberString({}, { message: 'O dígito da conta deve ser um número.' })
   @MaxLength(1, {
-    message: 'O dígito da conta pode ter no máximo 1 caractere.',
+    message: 'O dígito da conta deve ter 1 caractere.',
+  })
+  @MinLength(1, {
+    message: 'O dígito da conta deve ter 1 caractere.',
   })
   @ApiProperty()
   digit: string;
@@ -58,7 +68,10 @@ export class BankAccountUpdateDto {
   @IsOptional()
   @IsNumberString({}, { message: 'A agência da conta deve ser um número.' })
   @MaxLength(4, {
-    message: 'A agência da conta pode ter no máximo 4 caracteres.',
+    message: 'A agência da conta deve ter 4 caracteres.',
+  })
+  @MinLength(4, {
+    message: 'A agência da conta deve ter 4 caracteres.',
   })
   @ApiProperty()
   agency: string;
