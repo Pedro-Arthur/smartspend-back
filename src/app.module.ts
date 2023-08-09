@@ -10,6 +10,7 @@ import { BanksModule } from './banks/banks.module';
 import { CategoriesModule } from './categories/categories.module';
 import { SpendMethodsModule } from './spendMethods/spendMethods.module';
 import { BankAccountsModule } from './bankAccounts/bankAccounts.module';
+import { BankCardsModule } from './bankCards/bankCards.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { BankAccountsModule } from './bankAccounts/bankAccounts.module';
     CategoriesModule,
     SpendMethodsModule,
     BankAccountsModule,
+    BankCardsModule,
   ],
   providers: [
     {

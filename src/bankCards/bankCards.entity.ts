@@ -8,6 +8,7 @@ import {
   ManyToOne,
 } from 'typeorm';
 import { BankCardTypeEnum } from './bankCards.enum';
+import { User } from 'src/users/users.entity';
 
 @Entity({ name: 'bank_cards' })
 export class BankCard {
@@ -28,6 +29,11 @@ export class BankCard {
     nullable: false,
   })
   bankAccount: BankAccount;
+
+  @ManyToOne(() => User, (user) => user.cards, {
+    nullable: false,
+  })
+  user: User;
 
   @CreateDateColumn()
   createdAt: Date;
