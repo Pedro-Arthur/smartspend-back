@@ -45,7 +45,12 @@ export class BankCardsService {
     const { bankAccountId, ...rest } = data;
 
     const bankAccount = await this.bankAccountsRepository.findOne({
-      where: { id: bankAccountId },
+      where: {
+        id: bankAccountId,
+        user: {
+          id: user.id,
+        },
+      },
     });
 
     if (!bankAccount) {
@@ -80,7 +85,12 @@ export class BankCardsService {
 
     if (bankAccountId) {
       const bankAccount = await this.bankAccountsRepository.findOne({
-        where: { id: bankAccountId },
+        where: {
+          id: bankAccountId,
+          user: {
+            id: user.id,
+          },
+        },
       });
 
       if (!bankAccount) {
