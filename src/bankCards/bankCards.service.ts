@@ -51,6 +51,9 @@ export class BankCardsService {
           id: user.id,
         },
       },
+      relations: {
+        bank: true,
+      },
     });
 
     if (!bankAccount) {
@@ -90,6 +93,9 @@ export class BankCardsService {
           user: {
             id: user.id,
           },
+        },
+        relations: {
+          bank: true,
         },
       });
 
