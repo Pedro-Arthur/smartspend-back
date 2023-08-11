@@ -11,6 +11,7 @@ import { CategoriesModule } from './categories/categories.module';
 import { SpendMethodsModule } from './spendMethods/spendMethods.module';
 import { BankAccountsModule } from './bankAccounts/bankAccounts.module';
 import { BankCardsModule } from './bankCards/bankCards.module';
+import { GoalsModule } from './goals/goals.module';
 
 @Module({
   imports: [
@@ -32,6 +33,7 @@ import { BankCardsModule } from './bankCards/bankCards.module';
     SpendMethodsModule,
     BankAccountsModule,
     BankCardsModule,
+    GoalsModule,
   ],
   providers: [
     {
