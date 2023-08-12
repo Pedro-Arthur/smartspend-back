@@ -27,16 +27,6 @@ export class GoalCreateDto {
 
 export class GoalUpdateDto {
   @IsOptional()
-  @IsDateString({}, { message: 'Data inicial inválida!' })
-  @ApiProperty()
-  startDate: string;
-
-  @IsOptional()
-  @IsDateString({}, { message: 'Data final inválida!' })
-  @ApiProperty()
-  endDate: string;
-
-  @IsOptional()
   @IsNumber({}, { message: 'Valor inválido!' })
   @Min(1, { message: 'O valor precisa ser maior que R$ 1.00!' })
   @ApiProperty()

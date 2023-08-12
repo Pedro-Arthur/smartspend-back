@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  BadRequestException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { JwtUserDto } from 'src/auth/auth.dto';
 import { Goal } from './goals.entity';
@@ -24,6 +29,30 @@ export class GoalsService {
   }
 
   async create(user: JwtUserDto, data: GoalCreateDto) {
+    if (data.startDate > data.endDate) {
+      throw new BadRequestException(
+        'Data final deve ser maior que a data inicial.',
+      );
+    }
+
+    if (data.startDate === data.endDate) {
+      throw new BadRequestException(
+        'Data final e data inicial não podem ser iguais.',
+      );
+    }
+
+    const todayDate = new Date()
+      .toLocaleDateString('pt-BR', { timeZone: 'America/Sao_Paulo' })
+      .split('/')
+      .reverse()
+      .join('-');
+
+    if (data.startDate < todayDate) {
+      throw new BadRequestException(
+        'A data inicial deve ser a partir do dia atual.',
+      );
+    }
+
     return this.goalsRepository.save({
       user,
       ...data,
