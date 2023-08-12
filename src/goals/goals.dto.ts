@@ -22,7 +22,7 @@ export class GoalCreateDto {
   @IsNotEmpty()
   @IsNumber({}, { message: 'Valor inválido!' })
   @Min(1, { message: 'O valor precisa ser maior que R$ 1,00!' })
-  @Max(9999999, { message: 'O valor precisa ser menor que R$ 9.999.999,00!' })
+  @Max(9999999, { message: 'O valor precisa ser menor que R$ 9.999.999,99!' })
   @ApiProperty()
   maxValue: number;
 }
@@ -31,7 +31,7 @@ export class GoalUpdateDto {
   @IsOptional()
   @IsNumber({}, { message: 'Valor inválido!' })
   @Min(1, { message: 'O valor precisa ser maior que R$ 1,00!' })
-  @Max(9999999, { message: 'O valor precisa ser menor que R$ 9.999.999,00!' })
+  @Max(9999999, { message: 'O valor precisa ser menor que R$ 9.999.999,99!' })
   @ApiProperty()
   maxValue: number;
 }
