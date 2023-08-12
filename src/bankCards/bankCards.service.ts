@@ -44,6 +44,9 @@ export class BankCardsService {
           bank: true,
         },
       },
+      order: {
+        updatedAt: 'DESC',
+      },
     });
   }
 

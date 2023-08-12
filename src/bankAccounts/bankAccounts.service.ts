@@ -36,6 +36,9 @@ export class BankAccountsService {
       relations: {
         bank: true,
       },
+      order: {
+        updatedAt: 'DESC',
+      },
     });
   }
 

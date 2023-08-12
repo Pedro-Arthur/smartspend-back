@@ -25,6 +25,9 @@ export class GoalsService {
         endDate: true,
         maxValue: true,
       },
+      order: {
+        updatedAt: 'DESC',
+      },
     });
   }
 
