@@ -91,7 +91,9 @@ export class AuthService {
     });
 
     if (!foundToken) {
-      throw new NotFoundException('Token inválido!');
+      throw new NotFoundException(
+        'Token inválido! Por favor, acesse com e-mail e senha.',
+      );
     }
 
     return this.generateAuthToken(foundToken.user);
