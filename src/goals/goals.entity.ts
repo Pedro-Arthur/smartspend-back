@@ -22,7 +22,7 @@ export class Goal {
   @Column({ type: 'float', nullable: false })
   maxValue: number;
 
-  @ManyToOne(() => User, (user) => user.codes, { nullable: false })
+  @ManyToOne(() => User, (user) => user.goals, { nullable: false })
   user: User;
 
   @CreateDateColumn()

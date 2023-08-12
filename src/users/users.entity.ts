@@ -2,6 +2,7 @@ import { BankAccount } from 'src/bankAccounts/bankAccounts.entity';
 import { BankCard } from 'src/bankCards/bankCards.entity';
 import { Category } from 'src/categories/categories.entity';
 import { Code } from 'src/codes/codes.entity';
+import { Goal } from 'src/goals/goals.entity';
 import {
   Entity,
   Column,
@@ -39,6 +40,9 @@ export class User {
 
   @OneToMany(() => Code, (code) => code.user)
   codes: Code[];
+
+  @OneToMany(() => Goal, (goal) => goal.user)
+  goals: Goal[];
 
   @OneToMany(() => Category, (category) => category.user)
   categories: Category[];

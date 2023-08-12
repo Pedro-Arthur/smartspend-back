@@ -1,4 +1,10 @@
-import { Injectable, Inject, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  ForbiddenException,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { JwtUserDto } from 'src/auth/auth.dto';
 import { BankCard } from './bankCards.entity';
@@ -117,6 +123,16 @@ export class BankCardsService {
   }
 
   async remove(user: JwtUserDto, id: number) {
-    await this.bankCardsRepository.delete({ id, user });
+    try {
+      await this.bankCardsRepository.delete({ id, user });
+    } catch (error) {
+      if (error.code && error.code === '23503') {
+        throw new ForbiddenException(
+          'A exclusão não pode ser realizada devido à existência de registros associados a esse cartão.',
+        );
+      }
+
+      throw new InternalServerErrorException();
+    }
   }
 }

@@ -104,7 +104,7 @@ export class BankAccountsService {
     } catch (error) {
       if (error.code && error.code === '23503') {
         throw new ForbiddenException(
-          'Não é possível deletar uma conta que possui cartões vinculados.',
+          'A exclusão não pode ser realizada devido à existência de registros associados a essa conta.',
         );
       }
 
