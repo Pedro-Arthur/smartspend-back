@@ -1,13 +1,8 @@
-import {
-  Injectable,
-  Inject,
-  NotFoundException,
-  BadRequestException,
-} from '@nestjs/common';
+import { Injectable, Inject, BadRequestException } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { JwtUserDto } from 'src/auth/auth.dto';
 import { Goal } from './goals.entity';
-import { GoalCreateDto, GoalUpdateDto } from './goals.dto';
+import { GoalCreateDto } from './goals.dto';
 
 @Injectable()
 export class GoalsService {
@@ -58,29 +53,6 @@ export class GoalsService {
 
     return this.goalsRepository.save({
       user,
-      ...data,
-    });
-  }
-
-  async update(user: JwtUserDto, data: GoalUpdateDto, id: number) {
-    const goal = await this.goalsRepository.findOne({
-      where: {
-        id,
-        user: {
-          id: user.id,
-        },
-      },
-      select: {
-        id: true,
-      },
-    });
-
-    if (!goal) {
-      throw new NotFoundException('Meta não encontrada!');
-    }
-
-    return this.goalsRepository.save({
-      ...goal,
       ...data,
     });
   }
