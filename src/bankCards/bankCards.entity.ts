@@ -6,9 +6,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { BankCardTypeEnum } from './bankCards.enum';
 import { User } from 'src/users/users.entity';
+import { Spend } from 'src/spends/spends.entity';
 
 @Entity({ name: 'bank_cards' })
 export class BankCard {
@@ -34,6 +36,9 @@ export class BankCard {
     nullable: false,
   })
   user: User;
+
+  @OneToMany(() => Spend, (spend) => spend.bankCard)
+  spends: Spend[];
 
   @CreateDateColumn()
   createdAt: Date;

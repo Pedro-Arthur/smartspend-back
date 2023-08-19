@@ -1,3 +1,4 @@
+import { Spend } from 'src/spends/spends.entity';
 import { User } from 'src/users/users.entity';
 import {
   Entity,
@@ -6,6 +7,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 
 @Entity({ name: 'categories' })
@@ -18,6 +20,9 @@ export class Category {
 
   @ManyToOne(() => User, (user) => user.categories, { nullable: true })
   user: User;
+
+  @OneToMany(() => Spend, (spend) => spend.category)
+  spends: Spend[];
 
   @CreateDateColumn()
   createdAt: Date;
