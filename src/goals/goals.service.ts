@@ -42,9 +42,22 @@ export class GoalsService {
           },
         });
 
+        const totalSpent = spends.reduce((total, obj) => {
+          const numberValue = parseFloat(`${obj.value}`);
+          return total + numberValue;
+        }, 0);
+
+        const percent = parseFloat(
+          Math.min(
+            (totalSpent / parseFloat(`${goal.maxValue}`)) * 100,
+            100,
+          ).toFixed(2),
+        );
+
         return {
           ...goal,
-          spends,
+          totalSpent,
+          percent,
         };
       }),
     );
