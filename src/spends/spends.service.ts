@@ -14,6 +14,59 @@ export class SpendsService {
   async find(user: JwtUserDto) {
     return this.spendsRepository.find({
       where: { user: { id: user.id } },
+      select: {
+        id: true,
+        description: true,
+        value: true,
+        date: true,
+        spendMethod: {
+          id: true,
+          name: true,
+        },
+        category: {
+          id: true,
+          name: true,
+        },
+        bankAccount: {
+          id: true,
+          agency: true,
+          digit: true,
+          number: true,
+          bank: {
+            name: true,
+            id: true,
+            code: true,
+          },
+        },
+        bankCard: {
+          id: true,
+          lastFourNumbers: true,
+          type: true,
+          bankAccount: {
+            id: true,
+            agency: true,
+            digit: true,
+            number: true,
+            bank: {
+              name: true,
+              id: true,
+              code: true,
+            },
+          },
+        },
+      },
+      relations: {
+        bankAccount: {
+          bank: true,
+        },
+        bankCard: {
+          bankAccount: {
+            bank: true,
+          },
+        },
+        category: true,
+        spendMethod: true,
+      },
       order: {
         updatedAt: 'DESC',
       },
@@ -24,5 +77,7 @@ export class SpendsService {
 
   async update(user: JwtUserDto, data: SpendUpdateDto, id: number) {}
 
-  async remove(user: JwtUserDto, id: number) {}
+  async remove(user: JwtUserDto, id: number) {
+    await this.spendsRepository.delete({ id, user });
+  }
 }
