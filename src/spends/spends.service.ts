@@ -164,11 +164,6 @@ export class SpendsService {
     const { bankAccountId, bankCardId, spendMethodId, categoryId, ...rest } =
       data;
 
-    let bankAccount = null;
-    let bankCard = null;
-    let category = null;
-    let spendMethod = null;
-
     const spend = await this.spendsRepository.findOne({
       where: {
         id,
@@ -185,8 +180,14 @@ export class SpendsService {
       throw new NotFoundException('Gasto não encontrado!');
     }
 
+    const spendToSave: any = {
+      user,
+      ...rest,
+      ...spend,
+    };
+
     if (bankAccountId) {
-      bankAccount = await this.bankAccountsRepository.findOne({
+      const bankAccount = await this.bankAccountsRepository.findOne({
         where: {
           id: bankAccountId,
           user: {
@@ -201,10 +202,12 @@ export class SpendsService {
       if (!bankAccount) {
         throw new NotFoundException('Conta não encontrada!');
       }
+
+      spendToSave.bankAccount = bankAccount;
     }
 
     if (bankCardId) {
-      bankCard = await this.bankCardsRepository.findOne({
+      const bankCard = await this.bankCardsRepository.findOne({
         where: {
           id: bankCardId,
           user: {
@@ -221,10 +224,12 @@ export class SpendsService {
       if (!bankCard) {
         throw new NotFoundException('Cartão não encontrado!');
       }
+
+      spendToSave.bankCard = bankCard;
     }
 
     if (spendMethodId) {
-      spendMethod = await this.spendMethodsRepository.findOne({
+      const spendMethod = await this.spendMethodsRepository.findOne({
         where: {
           id: spendMethodId,
         },
@@ -233,10 +238,12 @@ export class SpendsService {
       if (!spendMethod) {
         throw new NotFoundException('Método não encontrado!');
       }
+
+      spendToSave.spendMethod = spendMethod;
     }
 
     if (categoryId) {
-      category = await this.categoriesRepository.findOne({
+      const category = await this.categoriesRepository.findOne({
         where: {
           id: categoryId,
         },
@@ -245,17 +252,11 @@ export class SpendsService {
       if (!category) {
         throw new NotFoundException('Categoria não encontrada!');
       }
+
+      spendToSave.category = category;
     }
 
-    return this.spendsRepository.save({
-      user,
-      bankAccount,
-      bankCard,
-      category,
-      spendMethod,
-      ...rest,
-      ...spend,
-    });
+    return this.spendsRepository.save(spendToSave);
   }
 
   async remove(user: JwtUserDto, id: number) {
