@@ -160,7 +160,103 @@ export class SpendsService {
     });
   }
 
-  async update(user: JwtUserDto, data: SpendUpdateDto, id: number) {}
+  async update(user: JwtUserDto, data: SpendUpdateDto, id: number) {
+    const { bankAccountId, bankCardId, spendMethodId, categoryId, ...rest } =
+      data;
+
+    let bankAccount = null;
+    let bankCard = null;
+    let category = null;
+    let spendMethod = null;
+
+    const spend = await this.spendsRepository.findOne({
+      where: {
+        id,
+        user: {
+          id: user.id,
+        },
+      },
+      select: {
+        id: true,
+      },
+    });
+
+    if (!spend) {
+      throw new NotFoundException('Gasto não encontrado!');
+    }
+
+    if (bankAccountId) {
+      bankAccount = await this.bankAccountsRepository.findOne({
+        where: {
+          id: bankAccountId,
+          user: {
+            id: user.id,
+          },
+        },
+        relations: {
+          bank: true,
+        },
+      });
+
+      if (!bankAccount) {
+        throw new NotFoundException('Conta não encontrada!');
+      }
+    }
+
+    if (bankCardId) {
+      bankCard = await this.bankCardsRepository.findOne({
+        where: {
+          id: bankCardId,
+          user: {
+            id: user.id,
+          },
+        },
+        relations: {
+          bankAccount: {
+            bank: true,
+          },
+        },
+      });
+
+      if (!bankCard) {
+        throw new NotFoundException('Cartão não encontrado!');
+      }
+    }
+
+    if (spendMethodId) {
+      spendMethod = await this.spendMethodsRepository.findOne({
+        where: {
+          id: spendMethodId,
+        },
+      });
+
+      if (!spendMethod) {
+        throw new NotFoundException('Método não encontrado!');
+      }
+    }
+
+    if (categoryId) {
+      category = await this.categoriesRepository.findOne({
+        where: {
+          id: categoryId,
+        },
+      });
+
+      if (!category) {
+        throw new NotFoundException('Categoria não encontrada!');
+      }
+    }
+
+    return this.spendsRepository.save({
+      user,
+      bankAccount,
+      bankCard,
+      category,
+      spendMethod,
+      ...rest,
+      ...spend,
+    });
+  }
 
   async remove(user: JwtUserDto, id: number) {
     await this.spendsRepository.delete({ id, user });
