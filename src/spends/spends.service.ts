@@ -2,6 +2,7 @@ import { Injectable, Inject } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { JwtUserDto } from 'src/auth/auth.dto';
 import { Spend } from './spends.entity';
+import { SpendCreateDto, SpendUpdateDto } from './spends.dto';
 
 @Injectable()
 export class SpendsService {
@@ -18,4 +19,10 @@ export class SpendsService {
       },
     });
   }
+
+  async create(user: JwtUserDto, data: SpendCreateDto) {}
+
+  async update(user: JwtUserDto, data: SpendUpdateDto, id: number) {}
+
+  async remove(user: JwtUserDto, id: number) {}
 }
