@@ -1,18 +1,21 @@
 import { Injectable, Inject, BadRequestException } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Between, Repository } from 'typeorm';
 import { JwtUserDto } from 'src/auth/auth.dto';
 import { Goal } from './goals.entity';
 import { GoalCreateDto } from './goals.dto';
+import { Spend } from 'src/spends/spends.entity';
 
 @Injectable()
 export class GoalsService {
   constructor(
     @Inject('GOAL_REPOSITORY')
     private goalsRepository: Repository<Goal>,
+    @Inject('SPEND_REPOSITORY')
+    private spendsRepository: Repository<Spend>,
   ) {}
 
   async find(user: JwtUserDto) {
-    return this.goalsRepository.find({
+    const goals = await this.goalsRepository.find({
       where: [{ user: { id: user.id } }],
       select: {
         id: true,
@@ -24,6 +27,27 @@ export class GoalsService {
         updatedAt: 'DESC',
       },
     });
+
+    return Promise.all(
+      goals.map(async (goal: Goal) => {
+        const spends = await this.spendsRepository.find({
+          where: {
+            user: {
+              id: user.id,
+            },
+            date: Between(goal.startDate, goal.endDate),
+          },
+          select: {
+            value: true,
+          },
+        });
+
+        return {
+          ...goal,
+          spends,
+        };
+      }),
+    );
   }
 
   async create(user: JwtUserDto, data: GoalCreateDto) {
