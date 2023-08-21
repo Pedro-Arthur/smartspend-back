@@ -12,6 +12,7 @@ import { SpendMethodsModule } from './spendMethods/spendMethods.module';
 import { BankAccountsModule } from './bankAccounts/bankAccounts.module';
 import { BankCardsModule } from './bankCards/bankCards.module';
 import { GoalsModule } from './goals/goals.module';
+import { SpendsModule } from './spends/spends.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { GoalsModule } from './goals/goals.module';
     BankAccountsModule,
     BankCardsModule,
     GoalsModule,
+    SpendsModule,
   ],
   providers: [
     {
