@@ -88,10 +88,40 @@ export class GoalsService {
       );
     }
 
-    return this.goalsRepository.save({
+    const goal = await this.goalsRepository.save({
       user,
       ...data,
     });
+
+    const spends = await this.spendsRepository.find({
+      where: {
+        user: {
+          id: user.id,
+        },
+        date: Between(goal.startDate, goal.endDate),
+      },
+      select: {
+        value: true,
+      },
+    });
+
+    const totalSpent = spends.reduce((total, obj) => {
+      const numberValue = parseFloat(`${obj.value}`);
+      return total + numberValue;
+    }, 0);
+
+    const percent = parseFloat(
+      Math.min(
+        (totalSpent / parseFloat(`${goal.maxValue}`)) * 100,
+        100,
+      ).toFixed(2),
+    );
+
+    return {
+      ...goal,
+      totalSpent,
+      percent,
+    };
   }
 
   async remove(user: JwtUserDto, id: number) {
