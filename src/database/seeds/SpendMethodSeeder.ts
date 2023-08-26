@@ -3,12 +3,12 @@ import { DataSource } from 'typeorm';
 import { SpendMethod } from 'src/spendMethods/spendMethods.entity';
 
 const spendMethods = [
-  { name: 'Dinheiro' },
-  { name: 'Cartão de Crédito' },
-  { name: 'Cartão de Débito' },
-  { name: 'Transferência Bancária' },
-  { name: 'Boleto Bancário' },
-  { name: 'PIX' },
+  { name: 'Dinheiro', key: 'money' },
+  { name: 'Cartão de Crédito', key: 'credit' },
+  { name: 'Cartão de Débito', key: 'debit' },
+  { name: 'Transferência Bancária', key: 'transfer' },
+  { name: 'Boleto Bancário', key: 'ticket' },
+  { name: 'PIX', key: 'pix' },
 ];
 
 export default class SpendMethodSeeder implements Seeder {

@@ -16,6 +16,9 @@ export class SpendMethod {
   @Column({ type: 'varchar', length: 100, nullable: false })
   name: string;
 
+  @Column({ type: 'varchar', length: 50, nullable: false })
+  key: string;
+
   @OneToMany(() => Spend, (spend) => spend.spendMethod)
   spends: Spend[];
 

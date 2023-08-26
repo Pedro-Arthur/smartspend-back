@@ -14,6 +14,7 @@ export class SpendMethodsService {
       select: {
         id: true,
         name: true,
+        key: true,
       },
     });
   }

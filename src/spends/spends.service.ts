@@ -34,6 +34,7 @@ export class SpendsService {
         spendMethod: {
           id: true,
           name: true,
+          key: true,
         },
         category: {
           id: true,
