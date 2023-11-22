@@ -23,9 +23,11 @@ const options: DataSourceOptions & SeederOptions = {
   namingStrategy: new SnakeNamingStrategy(),
   factories: ['dist/**/database/factories/**/*.js'],
   seeds: ['dist/**/database/seeds/**/*.js'],
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: !process.env.DEVELOPMENT
+    ? {
+        rejectUnauthorized: false,
+      }
+    : null,
 };
 
 export const AppDataSource = new DataSource(options);
