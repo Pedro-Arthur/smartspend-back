@@ -123,6 +123,10 @@ export class AuthService {
       throw new NotFoundException('Usuário não encontrado.');
     }
 
+    if (!foundUser.hasConfirmedEmail) {
+      throw new ForbiddenException('Confirme sua conta para se autenticar!');
+    }
+
     return this.generateAuthToken(foundUser);
   }
 
